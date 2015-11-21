@@ -20,7 +20,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<title>Wochenplaner - Programmierübungsaufgabe</title>
-	</head>
+	</head>	
 	<body>
 		<header>
 			<h1>Wochenplaner für Veranstaltungen</h1>
@@ -33,17 +33,24 @@
 			</jsp:scriptlet>
 		</header>
 		<main>
-			<jsp:scriptlet>
-			if (loggedIn) {
-			</jsp:scriptlet>
-				<jsp:directive.include file="includes/wochenplan.jsp" />
-			<jsp:scriptlet>
-			} else {
-			</jsp:scriptlet>
-				<jsp:directive.include file="includes/loginform.jsp" />
-			<jsp:scriptlet>
-			}
-			</jsp:scriptlet>
+			<% if(request.isSecure()) { %>
+				<jsp:scriptlet>
+				if (loggedIn) {
+				</jsp:scriptlet>
+					<jsp:directive.include file="includes/wochenplan.jsp" />
+				<jsp:scriptlet>
+				} else {
+				</jsp:scriptlet>
+					<jsp:directive.include file="includes/loginform.jsp" />
+				<jsp:scriptlet>
+				}
+				</jsp:scriptlet>
+			<% } else { %>
+				<div class="formbox">
+					<h2>Fehler: Unsichere Verbindung</h1>
+					<p>Wir verarbeiten in unserem Service personenbezogene Daten unserer Kunden. Es ist daher bedauerlicherweise nicht möglich, unseren Service über eine unverschlüsselte Verbindung zu nutzen. Rufen Sie unsere Seite bitte über das sichere https-Protokoll ab, um unseren Service zu nutzen.</p>
+				</div>
+			<% } %>
 		</main>
 	</body>
 </html>

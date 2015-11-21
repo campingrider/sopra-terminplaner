@@ -4,6 +4,7 @@
 	int minhr = 7;
 	int stunde;
 	int tag;
+	int quarts;
 	String[] wochentag = {"","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
 </jsp:declaration>
 <jsp:scriptlet>if (inContainer) {</jsp:scriptlet>
@@ -11,20 +12,22 @@
 	<p>Wählen Sie einen Zeitslot zum Hinzufügen neuer Termine oder zum Bearbeiten bestehender Termine.</p>
 	<table id="weekly">
 		<tbody>
-			<% for (stunde = minhr-1; stunde <= maxhr; stunde++) { %>
-				<tr>	
-					<% if (stunde < minhr) { %>
-					
-						<% for (tag = 0; tag <= 7; tag++) { %>	
-							<th><%= wochentag[tag] %></th>
+			<tr>
+			<% for (tag = 0; tag <= 7; tag++) { %>	
+				<th><%= wochentag[tag] %></th>
+			<% } %>
+			</tr>
+			<% for (stunde = minhr; stunde <= maxhr; stunde++) { %>
+				<% for (quarts = 1; quarts <= 4; quarts++) { %>
+					<tr>		
+						<% if (quarts == 1) { %>
+							<td rowspan="4" class="hour"><%= stunde %>:00</td>
 						<% } %>
-					<% } else { %>
-						<td class="hour"><%= stunde %>:00</td>
 						<% for (tag = 1; tag <= 7; tag++) { %>	
 							<td></td>
 						<% } %>
-					<% } %>
-				</tr>
+					</tr>
+				<% } %>
 			<% } %>
 		</tbody>
 	</table>

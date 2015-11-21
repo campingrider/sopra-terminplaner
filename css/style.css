@@ -89,15 +89,30 @@ main {
 #weekly td {
 	box-sizing:border-box;
 	width:calc(11.875vw + (11.875vw - 2.5rem) / 7);
-	height:calc((100vh - 6rem)/16);
+	height:calc((95vh - 6rem)/(16*4));
+	max-height:calc((95vh - 6rem)/(16*4));
 	padding:0.2em 0.5em;
-	border-bottom:1px solid #777;
 	border-right:1px solid #777;
+	text-align:center;
 }
 
-#weekly td:first-child {
+#weekly tr:nth-child(4n+1) {
+	border-bottom:1px solid #777;
+}
+
+#weekly tr:nth-child(4n+3) {
+	border-bottom:1px dashed #777;
+}
+
+#weekly tr:nth-child(4n+2), #weekly tr:nth-child(4n) {
+	
+}
+
+
+#weekly td.hour {
 	text-align:right;
 	width:2.5rem;
+	border-bottom:1px solid #777;
 }
 
 #weekly th {
