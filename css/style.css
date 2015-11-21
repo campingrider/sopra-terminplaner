@@ -21,6 +21,10 @@ header h1 {
 	font-size:1.5rem;
 }
 
+header a:visited, header a:active {
+	color:white;
+}
+
 main {
 	display:flex;
 	flex-direction:column;
@@ -28,7 +32,7 @@ main {
 
 .formbox {
 	width:16rem;
-	margin:1rem auto 0px auto;
+	margin:1rem 1rem 0px 1rem;
 	border:2px solid #dcdcfc;
 	border-radius:1rem;
 	padding:0em 1rem;
@@ -70,11 +74,43 @@ main {
 	text-align:right;
 }
 
+#weekly {
+	margin-top:2rem;
+	width:95vw;
+	border-collapse:collapse;
+	box-sizing:border-box;
+}
+
+#weekly tr {
+	box-sizing:border-box;
+	width:95vw;
+}
+
+#weekly td {
+	box-sizing:border-box;
+	width:calc(11.875vw + (11.875vw - 2.5rem) / 7);
+	height:calc((100vh - 6rem)/16);
+	padding:0.2em 0.5em;
+	border-bottom:1px solid #777;
+	border-right:1px solid #777;
+}
+
+#weekly td:first-child {
+	text-align:right;
+	width:2.5rem;
+}
+
+#weekly th {
+	border-bottom:1px solid #777;
+}
+
+#weekly td.hour {
+}
+
 @media all and (min-width: 36rem) {
 	main {
 		flex-direction: row;
 		justify-content:center;
-		width:34rem;
 		margin:0px auto;
 	}
 }

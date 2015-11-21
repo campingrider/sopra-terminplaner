@@ -1,8 +1,18 @@
 <jsp:directive.page pageEncoding="UTF-8"/>
 <jsp:declaration>
 	boolean inContainer = true;
-	boolean loggedIn = true;
+	boolean loggedIn = false;
+	String status = "";
 </jsp:declaration>
+<%
+	if (request.getParameterMap().get("status") != null) {
+		status = request.getParameterMap().get("status")[0];
+	}
+	loggedIn = false;
+	if (status.equals("login") || status.equals("register")) {
+		loggedIn = true;		
+	}
+%>
 <!DOCTYPE html>
 <html lang="de">
 	<head>
@@ -17,7 +27,7 @@
 			<jsp:scriptlet>
 			if (loggedIn) {
 			</jsp:scriptlet>
-				<p><a>abmelden.</a></p>
+				<p><a href="?status=logout">abmelden.</a></p>
 			<jsp:scriptlet>
 			}
 			</jsp:scriptlet>
