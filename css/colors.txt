@@ -1,0 +1,3 @@
+gelb: #fcfcbd
+grün: #dcfcbd
+rot:  #fcdcbd

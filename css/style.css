@@ -1,0 +1,80 @@
+body {
+	font-family: sans-serif;
+	margin:0px;
+}
+
+header {
+	display:flex;
+	flex-direction:row;
+	justify-content:space-between;
+	background-color:black;
+	padding:0.5rem;
+	color:white;
+}
+
+header * {
+	margin:auto 0px 0px 0px;
+}
+
+header h1 {
+	text-align:center;
+	font-size:1.5rem;
+}
+
+main {
+	display:flex;
+	flex-direction:column;
+}
+
+.formbox {
+	width:16rem;
+	margin:1rem auto 0px auto;
+	border:2px solid #dcdcfc;
+	border-radius:1rem;
+	padding:0em 1rem;
+	box-sizing:border-box;
+}
+
+#loginbox {
+	background-color:#dcfcbd;
+}
+
+#pwresbox {
+	background-color:#fcfcbd;
+}
+
+#registerbox {
+	background-color:#fcdcbd;
+}
+
+.formbox h2 {
+	text-align:center;
+}
+
+.formbox input[type=text], .formbox input[type=password], .formbox select {
+	display:inline-block;
+	width:calc(100% - 2px);
+	font-size:120%;
+	border:1px solid #777;
+	margin:1px;
+	padding:5px 5px;
+	box-sizing:border-box;
+}
+
+.formbox label, .boxlabel, .formbox select, .formbox input[readonly] {
+	color:#777;
+	font-size:75%;
+}
+
+.formbox .formbuttons {
+	text-align:right;
+}
+
+@media all and (min-width: 36rem) {
+	main {
+		flex-direction: row;
+		justify-content:center;
+		width:34rem;
+		margin:0px auto;
+	}
+}
