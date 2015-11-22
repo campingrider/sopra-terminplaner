@@ -11,6 +11,13 @@
 	String[] defRegVals = new String[7];
 	int i = 0;
 </jsp:declaration>
+<jsp:declaration>
+	String dbUrl = "";
+	String dbUsr = "";
+	String dbPW = "";
+</jsp:declaration>
+<%-- Die folgende Datei initialisiert die obigen Verbindungsdaten zur Datenbank %>
+<%@ include file="dbdata.jsp" %>
 <%
 	// Anfangswerte rauswerfen bzw. initialisieren
 	fatalErrorMessage = "";
