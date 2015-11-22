@@ -1,30 +1,53 @@
 <jsp:directive.page pageEncoding="UTF-8"/>
+<%@ page import="java.sql.*" %> 
+<%@ page import="java.io.*" %>
+<%@ page import="java.math.*" %>
 <jsp:declaration>
-	boolean inContainer = true;
-	boolean loggedIn = false;
-	boolean dataFault = false;
-	boolean fatalError = false;
-	String fatalErrorMessage = "";
-	String messages = ""; 
-	String status = "";
+	boolean inContainer;
+	boolean dataFault;
+	boolean fatalError;
+	String fatalErrorMessage;
+	String messages; 
+	String status;
 	java.security.MessageDigest md;
 	String[] defRegVals = new String[7];
+	String[] defLogVals = new String[7];
 	int i = 0;
+	Connection dbcon;
+	Statement dbs;
+	ResultSet dbrs;
+	PreparedStatement dbpst;
+	String sql;
+	String pwhash;
 </jsp:declaration>
+<%
+	// Anfangswerte rauswerfen bzw. initialisieren
+	boolean inContainer = true;
+	boolean dataFault = false;
+	boolean fatalError = false;
+	fatalErrorMessage = "";
+	messages = "";
+	status = "";
+	for (int i = 0; i < 7; i++) {
+		if (i < 2) defLogVals[i] = "";
+		defRegVals[i] = "";
+	}
+%>
 <jsp:declaration>
 	String dbUrl = "";
 	String dbUsr = "";
 	String dbPW = "";
 </jsp:declaration>
-<%-- Die folgende Datei initialisiert die obigen Verbindungsdaten zur Datenbank %>
+<%-- Die folgende Datei initialisiert die obigen Verbindungsdaten zur Datenbank --%>
 <%@ include file="dbdata.jsp" %>
-<%
-	// Anfangswerte rauswerfen bzw. initialisieren
-	fatalErrorMessage = "";
-	messages = "";
-	status = "";
-	for (int i = 0; i < 7; i++) {
-		defRegVals[i] = "";
+<% //DB-Initialisierung
+	try {
+		Class.forName("com.mysql.jdbc.Driver").newInstance(); 
+		dbcon = DriverManager.getConnection("jdbc:mysql://"+dbUrl, dbUsr, dbPW);
+	} catch (Exception e) {
+		fatalError = true;
+		fatalErrorMessage = fatalErrorMessage+"<p>Verbindung zur Datenbank ist fehlgeschlagen.</p>";
+		fatalErrorMessage = fatalErrorMessage+"<pre>"+e.toString()+"</pre>";
 	}
 %>
 <%	// Hash-Funktion initialisieren
@@ -34,13 +57,10 @@
 	if (request.getParameter("status") != null) {
 		status = request.getParameter("status");
 	}
-	loggedIn = false;
-	if (status.equals("login")) {
-		loggedIn = true;		
-	}
+	
 
 	if (!status.equals("")) {
-		if (status.equals("login")) {
+		if (status.equals("login") && session.getAttribute("uid") == null) {
 		%>
 			<%@ include file="includes/login.jsp" %>
 		<%
@@ -48,17 +68,18 @@
 		%>
 			<%@ include file="includes/logout.jsp" %>
 		<%
-		} else if (status.equals("pwres")) {
+		} else if (status.equals("pwres") && session.getAttribute("uid") == null) {
 		%>
 			<%@ include file="includes/pwres.jsp" %>
 		<%
-		} else if (status.equals("register")) {
+		} else if (status.equals("register") && session.getAttribute("uid") == null) {
 		%>
 			<%@ include file="includes/register.jsp" %>
 		<%
 		} 
 	}
 %>
+
 <!DOCTYPE html>
 <html lang="de">
 	<head>
@@ -71,36 +92,43 @@
 		<header>
 			<h1>Wochenplaner für Veranstaltungen</h1>
 			<jsp:scriptlet>
-			if (loggedIn) {
+			if (session.getAttribute("uid") != null) {
 			</jsp:scriptlet>
 				<p><a href="?status=logout">abmelden.</a></p>
 			<jsp:scriptlet>
 			}
 			</jsp:scriptlet>
 		</header>
-		<% if (!messages.equals("")) { %>
+		<% if (!messages.equals("") && !fatalError && request.isSecure()) { %>
 		<aside id="messages">
 			<%= messages %>
 		</aside>
 		<% } %>
 		<main>
-			<% if(request.isSecure()) { %>
-				<jsp:scriptlet>
-				if (loggedIn) {
-				</jsp:scriptlet>
-					<jsp:directive.include file="includes/wochenplan.jsp" />
-				<jsp:scriptlet>
-				} else {
-				</jsp:scriptlet>
-					<jsp:directive.include file="includes/loginform.jsp" />
-				<jsp:scriptlet>
-				}
-				</jsp:scriptlet>
+			<% if (!fatalError) { %>
+				<% if(request.isSecure()) { %>
+					<jsp:scriptlet>
+					if (session.getAttribute("uid") != null) {
+					</jsp:scriptlet>
+						<jsp:directive.include file="includes/wochenplan.jsp" />
+					<jsp:scriptlet>
+					} else {
+					</jsp:scriptlet>
+						<jsp:directive.include file="includes/loginform.jsp" />
+					<jsp:scriptlet>
+					}
+					</jsp:scriptlet>
+				<% } else { %>
+					<div id="messages">
+						<h2>Fehler: Unsichere Verbindung</h1>
+						<p>Wir verarbeiten in unserem Service personenbezogene Daten unserer Kunden. Es ist daher bedauerlicherweise nicht möglich, unseren Service über eine unverschlüsselte Verbindung zu nutzen. Rufen Sie unsere Seite bitte über das sichere https-Protokoll ab, um unseren Service zu nutzen.</p>
+					</div>
+				<% } %>
 			<% } else { %>
-				<div class="formbox">
-					<h2>Fehler: Unsichere Verbindung</h1>
-					<p>Wir verarbeiten in unserem Service personenbezogene Daten unserer Kunden. Es ist daher bedauerlicherweise nicht möglich, unseren Service über eine unverschlüsselte Verbindung zu nutzen. Rufen Sie unsere Seite bitte über das sichere https-Protokoll ab, um unseren Service zu nutzen.</p>
-				</div>
+					<div id="messages">
+						<h2>Fataler Fehler</h1>
+						<%= fatalErrorMessage %>
+					</div>
 			<% } %>
 		</main>
 	</body>

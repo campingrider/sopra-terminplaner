@@ -8,7 +8,6 @@
 	// 5: Sicherheits-Frage
 	// 6: Sicherheits-Antwort
 	String[] regdata = new String[7];
-	String pwhash;
 </jsp:declaration>
 <jsp:scriptlet>
 	if (inContainer) { 
@@ -31,7 +30,7 @@
 			dataFault = true;
 			messages = messages + "<p>Sie haben keinen Vornamen angegeben</p>";
 			regdata[1] = "";
-		} else if (!regdata[1].matches("^[^!\"§$%&/()=\\\\{}°_.,;:]+$")) {
+		} else if (!regdata[1].matches("^[^!\"'§$%&/()=\\\\{}°_.,;:]+$")) {
 			dataFault = true;
 			messages = messages + "<p>Der Vorname darf keine Sonderzeichen außer dem Bindestrich beinhalten.</p>";
 		}
@@ -42,7 +41,7 @@
 			dataFault = true;
 			messages = messages + "<p>Sie haben keinen Nachnamen angegeben</p>";
 			regdata[2] = "";
-		} else if (!regdata[2].matches("^[^!\"§$%&/()=\\\\{}°_.,;:]+$")) {
+		} else if (!regdata[2].matches("^[^!\"'§$%&/()=\\\\{}°_.,;:]+$")) {
 			dataFault = true;
 			messages = messages + "<p>Der Nachname darf keine Sonderzeichen außer dem Bindestrich beinhalten.</p>";
 		}
@@ -51,8 +50,9 @@
 		regdata[4] = request.getParameter("register_password_repeat");
 		
 		if (regdata[3] != null && regdata[4] != null && !regdata[3].equals("") && regdata[3].equals(regdata[4])) {
+			// hash the password
 			md.update(regdata[3].getBytes());
-			pwhash = new String(md.digest());
+			pwhash = javax.xml.bind.DatatypeConverter.printHexBinary(md.digest());
 		} else {
 			if (regdata[3] == null) regdata[3] = "";
 			if (regdata[4] == null) regdata[4] = "";
@@ -66,7 +66,7 @@
 			dataFault = true;
 			messages = messages + "<p>Sie haben keine Sicherheitsfrage gewählt.</p>";
 			regdata[5] = "";
-		} else if (!regdata[5].matches("^[^(),.]+$")) {
+		} else if (!regdata[5].matches("^[^'(),.]+$")) {
 			dataFault = true;
 			messages = messages + "<p>Die Sicherheitsfrage darf keine Klammern, Kommata oder Punkte enthalten.</p>";
 		}
@@ -77,12 +77,32 @@
 			dataFault = true;
 			messages = messages + "<p>Sie haben keine Antwort auf die Sicherheitsfrage gegeben.</p>";
 			regdata[6] = "";
-		} else if (!regdata[6].matches("^[^(),.]+$")) {
+		} else if (!regdata[6].matches("^[^'(),.]+$")) {
 			dataFault = true;
 			messages = messages + "<p>Die Antwort auf die Sicherheitsfrage darf keine Klammern, Kommata oder Punkte enthalten.</p>";
 		} 
 
-		// 
+		// Falls es bis hier keinen DataFault gab: Versuchen, Werte einzufügen.
+		if (!dataFault) {
+			sql = "INSERT INTO `sopraplaner_users` (`uid`, `email`, `firstname`, `lastname`, `sec_q`, `sec_a`, `pwhash`) VALUES (NULL, '"+regdata[0]+"', '"+regdata[1]+"', '"+regdata[2]+"', '"+regdata[5]+"', '"+regdata[6]+"', '"+pwhash+"');";
+			
+			dbs = dbcon.createStatement();
+			try {
+				dbs.executeUpdate(sql); 
+				
+				messages = messages + "<p>Die Registrierung war erfolgreich.</p>";
+			} catch (SQLException e) {
+				dataFault = true;
+				messages = messages + "<p>Die Registrierung ist fehlgeschlagen.</p>";
+				if (e.getMessage().matches("Duplicate entry '"+regdata[0]+"' for key 'email'")) {
+					messages = messages + "<p>Mit dieser E-Mail-Adresse ist schon ein Nutzer registriert.</p>";
+				} else {
+					messages = messages + "<p>Die Datenbank akzeptiert Ihre Eingaben nicht: "+e.getMessage()+"</p>";
+				}	
+			}
+		}
+		
+		// Enhancement: Bestätigungslink für E-Mail könnte noch eingeführt werden
 
 		// Falls es einen dataFault gab muss die Eingabemaske wieder gefüllt werden -> Befüllen von defRegVals
 		if (dataFault) {

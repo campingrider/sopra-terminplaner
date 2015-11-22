@@ -15,10 +15,10 @@
 			<h2>Anmelden</h2>
 			<p class="boxlabel">Haben Sie schon ein Benutzerkonto bei uns? Dann geben Sie hier Ihre Logindaten ein.</p>
 			<p>
-				<label for="login_mail">E-Mail-Adresse</label><br><input name="login_mail" id="login_mail" type="text">
+				<label for="login_mail">E-Mail-Adresse</label><br><input name="login_mail" id="login_mail" type="text" value="<%= defLogVals[0] %>">
 			</p>
 			<p>
-				<label for="login_password">Passwort</label><br><input name="login_password" id="login_password" type="password">
+				<label for="login_password">Passwort</label><br><input name="login_password" id="login_password" type="password" value="<%= defLogVals[1] %>">
 			</p>
 			<p class="formbuttons"><button>Anmelden.</button></p>
 		</form>
