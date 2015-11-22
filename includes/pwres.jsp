@@ -75,7 +75,7 @@
 						  pwhash = javax.xml.bind.DatatypeConverter.printHexBinary(md.digest());
 						  
 						  sql = "UPDATE `sopraplaner_users` SET `pwhash`='"+pwhash+"' WHERE  `email`='"+pwresdata[0]+"';";
-						  messages = messages + "<pre>"+sql+"</pre>";
+						  
 						  dbs.executeUpdate(sql);
 					   }catch (MessagingException mex) {
 						   dataFault = true;

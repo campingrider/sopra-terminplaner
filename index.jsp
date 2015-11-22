@@ -21,6 +21,7 @@
 	String messages; 
 	String status;
 	java.security.MessageDigest md;
+	java.security.MessageDigest md2;
 	String[] defRegVals = new String[7];
 	String[] defLogVals = new String[2];
 	String[] defPWRVals = new String[3];
@@ -72,8 +73,9 @@
 		fatalErrorMessage = fatalErrorMessage+"<pre>"+e.toString()+"</pre>";
 	}
 %>
-<%	// Hash-Funktion initialisieren
+<%	// Hash-Funktionen initialisieren
 	md = java.security.MessageDigest.getInstance("SHA-512");
+	md2 = java.security.MessageDigest.getInstance("SHA-1");
 %>
 <%	// Status-Abfrage und Einbindung entsprechender Skripte zur Datenbehandlung
 	if (request.getParameter("status") != null) {

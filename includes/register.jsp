@@ -93,7 +93,14 @@
 				messages = messages + "<p>Die Registrierung war erfolgreich. Ihr Benutzerkonto muss noch aktiviert werden. Betätigen Sie dazu den Link in der E-Mail, die wir Ihnen soeben zugesandt haben.</p>";
 			
 				// E-Mail mit Bestätigungslink senden
-				key = "";
+				sql = "SELECT `uid` FROM `sopraplaner_users` WHERE `email`='"+regdata[0]+"';";
+				dbs = dbcon.createStatement();
+				dbrs = dbs.executeQuery(sql);
+				dbrs.next();
+				
+				key = dbrs.getString("uid")+regdata[0]+regdata[1]+dbrs.getString("uid")+regdata[2]+pwhash+dbrs.getString("uid");
+				md2.update(key.getBytes());
+				key = javax.xml.bind.DatatypeConverter.printHexBinary(md2.digest());
 				href = home+"?status=mailconfirm&mail="+regdata[0]+"&key="+key;
 				
 			   try{
