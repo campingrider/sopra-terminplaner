@@ -26,13 +26,13 @@
 			<h2>Passwort zurücksetzen</h2>
 			<p class="boxlabel">Haben Sie ihr Passwort vergessen? Dann können Sie sich hier ein Neues zusenden lassen.</p>
 			<p>
-				<label for="pwres_mail">E-Mail-Adresse</label><br><input name="pwres_mail" id="pwres_mail" type="text">
+				<label for="pwres_mail">E-Mail-Adresse</label><br><input name="pwres_mail" id="pwres_mail" type="text" value="<%= defPWRVals[0] %>">
 			</p>
 			<p>
 				<label for="pwres_sec_a">Sicherheitsfrage</label>
 				<br>
-				<input name="pwres_sec_q" id="pwres_sec_q" type="text" readonly value="Zunächst E-Mail angeben">
-				<input name="pwres_sec_a" id="pwres_sec_a" type="text">
+				<input name="pwres_sec_q" id="pwres_sec_q" type="text" readonly value="<%= defPWRVals[1] %>">
+				<input name="pwres_sec_a" id="pwres_sec_a" type="text" value="<%= defPWRVals[2] %>">
 			</p>
 			<p class="formbuttons"><button>Passwort zurücksetzen.</button></p>
 		</form>

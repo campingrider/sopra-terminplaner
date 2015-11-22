@@ -22,7 +22,8 @@
 	String status;
 	java.security.MessageDigest md;
 	String[] defRegVals = new String[7];
-	String[] defLogVals = new String[7];
+	String[] defLogVals = new String[2];
+	String[] defPWRVals = new String[3];
 	int i = 0;
 	Connection dbcon;
 	Statement dbs;
@@ -46,8 +47,10 @@
 	status = "";
 	for (int i = 0; i < 7; i++) {
 		if (i < 2) defLogVals[i] = "";
+		if (i < 3) defPWRVals[i] = "";
 		defRegVals[i] = "";
 	}
+	defPWRVals[1] = "Zunächst E-Mail angeben";
 	mailprops = System.getProperties();
 	mailprops.setProperty(mailserver, host);
 	mailSession = Session.getDefaultInstance(mailprops);

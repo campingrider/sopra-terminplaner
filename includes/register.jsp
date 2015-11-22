@@ -108,6 +108,7 @@
 				  
 				  Transport.send(mail);
 			   }catch (MessagingException mex) {
+				   dataFault = true;
 				  mex.printStackTrace();
 				  messages = messages + "Error: unable to send E-Mail....";
 			   }
@@ -123,8 +124,6 @@
 				}	
 			}
 		}
-		
-		// Enhancement: Bestätigungslink für E-Mail könnte noch eingeführt werden
 
 		// Falls es einen dataFault gab muss die Eingabemaske wieder gefüllt werden -> Befüllen von defRegVals
 		if (dataFault) {
