@@ -90,7 +90,29 @@
 			try {
 				dbs.executeUpdate(sql); 
 				
-				messages = messages + "<p>Die Registrierung war erfolgreich.</p>";
+				messages = messages + "<p>Die Registrierung war erfolgreich. Ihr Benutzerkonto muss noch aktiviert werden. Betätigen Sie dazu den Link in der E-Mail, die wir Ihnen soeben zugesandt haben.</p>";
+			
+				// E-Mail mit Bestätigungslink senden
+				key = "";
+				href = home+"?status=mailconfirm&mail="+regdata[0]+"&key="+key;
+				
+			   try{
+				  mail = new MimeMessage(mailSession);
+				  mail.setFrom(new InternetAddress(mailAddress));
+				  mail.addRecipient(Message.RecipientType.TO,
+										   new InternetAddress(regdata[0]));
+				  mail.setSubject("Aktivierung des Wochenplaner-Benutzerkontos");
+				 
+				  mail.setContent("<h1>Aktivierung des Wochenplaner-Benutzerkontos</h1><p>Auf Ihre E-Mail-Adresse wurde ein Wochenplan-Benutzerkonto angelegt. Sie können die Echtheit der E-Mail-Adresse über folgenden Link bestätigen:</p><p><a href=\""+href+"\">"+href+"</a></p><p>Sollten Sie die Registrierung nicht persönlich vorgenommen haben, so ignorieren Sie bitte diese Benachrichtigung.</p><p>Mit freundlichen Grüßen,<br><br>Ihr Wochenplaner-Serviceteam</p>",
+										"text/html" );
+				  
+				  Transport.send(mail);
+			   }catch (MessagingException mex) {
+				  mex.printStackTrace();
+				  messages = messages + "Error: unable to send E-Mail....";
+			   }
+			
+			
 			} catch (SQLException e) {
 				dataFault = true;
 				messages = messages + "<p>Die Registrierung ist fehlgeschlagen.</p>";

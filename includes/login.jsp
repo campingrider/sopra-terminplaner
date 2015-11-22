@@ -32,7 +32,7 @@
 		
 		// Falls es bis hier keinen DataFault gab: Logindaten überprüfen
 		if (!dataFault) {
-			sql = "SELECT `uid`,`pwhash`,`firstname`,`lastname` FROM `sopraplaner_users` WHERE `email` = '"+logdata[0]+"'";
+			sql = "SELECT `uid`,`pwhash`,`firstname`,`lastname`,`activated` FROM `sopraplaner_users` WHERE `email` = '"+logdata[0]+"'";
 			
 			dbs = dbcon.createStatement();
 			try {
@@ -42,11 +42,19 @@
 								
 				if (pwhash.equals(dbrs.getString("pwhash"))) {
 					
-					// Bei richtigen Daten: Eintrag in den sessions-Daten vornehmen
-					session.setAttribute("uid",dbrs.getString("uid"));
-					session.setAttribute("mail",logdata[0]);
-					session.setAttribute("firstname",dbrs.getString("firstname"));
-					session.setAttribute("lastname",dbrs.getString("lastname"));
+					// Login ist nur mit aktiviertem Konto möglich
+					
+					if (dbrs.getBoolean("activated")) {
+					
+						// Bei richtigen Daten: Eintrag in den sessions-Daten vornehmen
+						session.setAttribute("uid",dbrs.getString("uid"));
+						session.setAttribute("mail",logdata[0]);
+						session.setAttribute("firstname",dbrs.getString("firstname"));
+						session.setAttribute("lastname",dbrs.getString("lastname"));
+					} else {
+						dataFault = true;
+						messages = messages + "<p>Eine Anmeldung ist erst nach Bestätigung der E-Mail-Adresse möglich.</p>";					
+					}
 					
 					dbrs.close();
 					

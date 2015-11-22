@@ -2,6 +2,17 @@
 <%@ page import="java.sql.*" %> 
 <%@ page import="java.io.*" %>
 <%@ page import="java.math.*" %>
+<%@ page import="java.util.*,javax.mail.*"%>
+<%@ page import="javax.mail.internet.*,javax.activation.*"%>
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+<jsp:declaration>
+	String home;
+	String host;
+	String mailserver;
+	String mailAddress;
+</jsp:declaration>
+<%-- Die folgende Datei initialisiert die obigen Verbindungsdaten zu E-Mail-Server und Wochenplaner --%>
+<%@ include file="maildata.jsp" %>
 <jsp:declaration>
 	boolean inContainer;
 	boolean dataFault;
@@ -19,6 +30,11 @@
 	PreparedStatement dbpst;
 	String sql;
 	String pwhash;
+	Properties mailprops;
+	Session mailSession;
+	MimeMessage mail;
+	String key;
+	String href;
 </jsp:declaration>
 <%
 	// Anfangswerte rauswerfen bzw. initialisieren
@@ -32,6 +48,9 @@
 		if (i < 2) defLogVals[i] = "";
 		defRegVals[i] = "";
 	}
+	mailprops = System.getProperties();
+	mailprops.setProperty(mailserver, host);
+	mailSession = Session.getDefaultInstance(mailprops);
 %>
 <jsp:declaration>
 	String dbUrl = "";
@@ -75,6 +94,10 @@
 		} else if (status.equals("register") && session.getAttribute("uid") == null) {
 		%>
 			<%@ include file="includes/register.jsp" %>
+		<%
+		} else if (status.equals("mailconfirm")) {
+		%>
+			<%@ include file="includes/mailconfirm.jsp" %>
 		<%
 		} 
 	}
