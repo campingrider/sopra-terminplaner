@@ -1,5 +1,15 @@
 <jsp:directive.page pageEncoding="UTF-8"/>
+<jsp:declaration>
+	String[] secQOptions;
+</jsp:declaration>
 <jsp:scriptlet>if (inContainer) {</jsp:scriptlet>
+	<%
+		secQOptions = new String[4];
+		secQOptions[0] = "Geburtsname Ihrer Mutter";
+		secQOptions[1] = "Name Ihres ersten Haustiers";
+		secQOptions[2] = "Ihr Lieblings-Urlaubsziel";
+		secQOptions[3] = "Ihr Lieblings-Musiker";
+	%>
 	<div>
 		<form id="loginbox" class="formbox" action="?status=login" method="post">
 			<h2>Anmelden</h2>
@@ -31,25 +41,28 @@
 		<h2>Registrieren</h2>
 		<p class="boxlabel">Geben Sie hier ihre Daten an, falls Sie unseren Service zum ersten Mal benutzen möchten.</p>
 		<p>
-			<label for="login_mail">E-Mail-Adresse</label><br><input name="register_mail" id="register_mail" type="text">
+			<label for="register_mail">E-Mail-Adresse</label><br><input name="register_mail" id="register_mail" type="text" value="<%= defRegVals[0] %>">
 		</p>
 		<p>
-			<label for="register_firstname">Vorname</label><br><input name="register_firstname" id="register_lastname" type="text">
-			<label for="register_lastname">Nachname</label><br><input name="register_lastname" id="register_lastname" type="text">
+			<label for="register_firstname">Vorname</label><br><input name="register_firstname" id="register_lastname" type="text" value="<%= defRegVals[1] %>">
+			<label for="register_lastname">Nachname</label><br><input name="register_lastname" id="register_lastname" type="text" value="<%= defRegVals[2] %>">
 		</p>
 		<p>
-			<label for="register_password">Passwort</label><br><input name="register_password" id="register_password" type="password">
-			<label for="register_password_repeat">Passwort wiederholen</label><br><input name="register_password" id="register_password" type="password">
+			<label for="register_password">Passwort</label><br><input name="register_password" id="register_password" type="password" value="<%= defRegVals[3] %>">
+			<label for="register_password_repeat">Passwort wiederholen</label><br><input name="register_password_repeat" id="register_password_repeat" type="password" value="<%= defRegVals[4] %>">
 		</p>
 		<p>
 			<label for="register_sec_q">Sicherheitsfrage</label><br>
 			<select name="register_sec_q" id="register_sec_q" size="1">
-				<option value="mother_birthname">Geburtsname Ihrer Mutter</option>
-				<option value="first_pet_name">Name Ihres ersten Haustiers</option>
-				<option value="holiday_goal">Ihr Lieblings-Urlaubsziel</option>
-				<option value="musician">Ihr Lieblings-Musiker</option>
+				<%
+					for (i = 0; i < secQOptions.length; i++) {
+				%>
+						<option <%= secQOptions[i].equals(defRegVals[5])?"selected ":"" %>><%= secQOptions[i] %></option>
+				<%
+					}
+				%>
 			</select>
-			<br><input name="register_sec_a" id="register_sec_a" type="text">
+			<br><input name="register_sec_a" id="register_sec_a" type="text" value="<%= defRegVals[6] %>">
 		</p>
 		<p class="formbuttons"><button>Registrieren.</button></p>
 	</form>

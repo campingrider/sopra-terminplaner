@@ -2,15 +2,54 @@
 <jsp:declaration>
 	boolean inContainer = true;
 	boolean loggedIn = false;
+	boolean dataFault = false;
+	boolean fatalError = false;
+	String fatalErrorMessage = "";
+	String messages = ""; 
 	String status = "";
+	java.security.MessageDigest md;
+	String[] defRegVals = new String[7];
+	int i = 0;
 </jsp:declaration>
 <%
-	if (request.getParameterMap().get("status") != null) {
-		status = request.getParameterMap().get("status")[0];
+	// Anfangswerte rauswerfen bzw. initialisieren
+	fatalErrorMessage = "";
+	messages = "";
+	status = "";
+	for (int i = 0; i < 7; i++) {
+		defRegVals[i] = "";
+	}
+%>
+<%	// Hash-Funktion initialisieren
+	md = java.security.MessageDigest.getInstance("SHA-512");
+%>
+<%	// Status-Abfrage und Einbindung entsprechender Skripte zur Datenbehandlung
+	if (request.getParameter("status") != null) {
+		status = request.getParameter("status");
 	}
 	loggedIn = false;
-	if (status.equals("login") || status.equals("register")) {
+	if (status.equals("login")) {
 		loggedIn = true;		
+	}
+
+	if (!status.equals("")) {
+		if (status.equals("login")) {
+		%>
+			<%@ include file="includes/login.jsp" %>
+		<%
+		} else if (status.equals("logout")) {
+		%>
+			<%@ include file="includes/logout.jsp" %>
+		<%
+		} else if (status.equals("pwres")) {
+		%>
+			<%@ include file="includes/pwres.jsp" %>
+		<%
+		} else if (status.equals("register")) {
+		%>
+			<%@ include file="includes/register.jsp" %>
+		<%
+		} 
 	}
 %>
 <!DOCTYPE html>
@@ -32,6 +71,11 @@
 			}
 			</jsp:scriptlet>
 		</header>
+		<% if (!messages.equals("")) { %>
+		<aside id="messages">
+			<%= messages %>
+		</aside>
+		<% } %>
 		<main>
 			<% if(request.isSecure()) { %>
 				<jsp:scriptlet>
