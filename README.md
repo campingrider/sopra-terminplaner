@@ -5,7 +5,7 @@ Work in progress...
 
 ## Einrichtung und Konfiguration ##
 
-Das System baut auf Apache Tomcat als Webserver auf, eine entsprechend präparierte MySQL-Datenbank muss bereitgestellt werden. Die Zugangsdaten zu Datenbank und Mailserver sind in den entsprechenden Dateien maildata.jsp und dbdata.jsp einzutragen.
+Das System baut auf Apache Tomcat als Webserver auf, eine entsprechend präparierte MySQL-Datenbank muss bereitgestellt werden. Die Zugangsdaten zu Datenbank und Mailserver sind in den entsprechenden Dateien maildata.jsp und dbdata.jsp einzutragen. Zum Schutz der persönlichen Daten setzt das System https voraus, tomcat muss also entsprechend für https eingerichtet werden - die korrekte Adresse muss schließlich in maildata.jsp hinterlegt werden, damit die Aktivierungslinks generiert werden können.
 
 Zusätzliche libs (zu platzieren in %CATALINA_HOME%/lib), die für tomcat benötigt werden:
 
