@@ -108,11 +108,11 @@
 	</head>	
 	<body>
 		<header>
-			<h1>Wochenplaner für Veranstaltungen</h1>
+			<h1>Wochenplaner für Veranstaltungen<% if (session.getAttribute("uid") != null) { %><span class="onlyprint_i"> von <%= session.getAttribute("firstname") %>&nbsp;<%= session.getAttribute("lastname") %></span><% } %></h1>
 			<jsp:scriptlet>
 			if (session.getAttribute("uid") != null) {
 			</jsp:scriptlet>
-				<p><a href="?status=logout">abmelden.</a></p>
+				<p class="noprint"><a href="javascript:window.print()">drucken.</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="?status=logout">abmelden.</a></p>
 			<jsp:scriptlet>
 			}
 			</jsp:scriptlet>

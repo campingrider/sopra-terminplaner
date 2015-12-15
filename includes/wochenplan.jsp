@@ -10,7 +10,7 @@
 
 <jsp:scriptlet>if (inContainer) {</jsp:scriptlet>
 <div>
-	<p>Herzlich Willkommen, <strong><%= session.getAttribute("firstname") %>&nbsp;<%= session.getAttribute("lastname") %></strong>. Wählen Sie einen Zeitslot zum Hinzufügen neuer Termine oder zum Bearbeiten bestehender Termine.</p>
+	<p class="noprint">Herzlich Willkommen, <strong><%= session.getAttribute("firstname") %>&nbsp;<%= session.getAttribute("lastname") %></strong>. Wählen Sie einen Zeitslot zum Hinzufügen neuer Termine oder zum Bearbeiten bestehender Termine.</p>
 	<table id="weekly">
 		<tbody>
 			<tr>

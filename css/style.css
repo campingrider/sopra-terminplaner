@@ -73,6 +73,7 @@ main, div.boxcontainer {
 	margin:1px;
 	padding:5px 5px;
 	box-sizing:border-box;
+	background-color:white;
 }
 
 .formbox label, .boxlabel, .formbox select, .formbox input[readonly] {
@@ -115,6 +116,17 @@ main, div.boxcontainer {
 	text-align:center;
 }
 
+#weekly td:not(:first-child) {
+	cursor:pointer;
+	min-width:12%;
+	max-width:14%;
+	hyphens:auto;
+}
+
+#weekly td:not(:first-child):hover {
+	outline: 2px solid red;
+}
+
 #weekly td.hour {
 	text-align:right;
 	width:2.5rem;
@@ -147,6 +159,11 @@ dialog.modal {
 	overflow: auto;
 	background-color:rgba(75,75,75);
 	padding:0 2em;
+	background-color:#eee;
+}
+
+dialog .formbox {
+	background-color:#dedede;
 }
 
 dialog fieldset {
@@ -155,4 +172,24 @@ dialog fieldset {
 
 option[disabled] {
 	background-color:#fcdcbd;
+}
+
+.onlyprint_i,.onlyprint_b {
+	display:none;
+}
+
+@media print {
+	.noprint {
+		display:none !important;
+	}
+	
+	.onlyprint_i {
+		display:inline;
+	}
+	
+	.onlyprint_b {
+		display:block;
+	}
+	
+	@page { size:landscape; }
 }
