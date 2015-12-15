@@ -1,10 +1,12 @@
-<jsp:directive.page pageEncoding="UTF-8"/>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %> 
 <%@ page import="java.io.*" %>
 <%@ page import="java.math.*" %>
 <%@ page import="java.util.*,javax.mail.*"%>
 <%@ page import="javax.mail.internet.*,javax.activation.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+
 <jsp:declaration>
 	String home;
 	String host;
@@ -13,11 +15,10 @@
 </jsp:declaration>
 <%-- Die folgende Datei initialisiert die obigen Verbindungsdaten zu E-Mail-Server und Wochenplaner --%>
 <%@ include file="maildata.jsp" %>
+
+<%@ include file="init_generics.jsp" %>
 <jsp:declaration>
 	boolean inContainer;
-	boolean dataFault;
-	boolean fatalError;
-	String fatalErrorMessage;
 	String messages; 
 	String status;
 	java.security.MessageDigest md;
@@ -26,11 +27,6 @@
 	String[] defLogVals = new String[2];
 	String[] defPWRVals = new String[3];
 	int i = 0;
-	Connection dbcon;
-	Statement dbs;
-	ResultSet dbrs;
-	PreparedStatement dbpst;
-	String sql;
 	String pwhash;
 	Properties mailprops;
 	Session mailSession;
@@ -40,10 +36,7 @@
 </jsp:declaration>
 <%
 	// Anfangswerte rauswerfen bzw. initialisieren
-	boolean inContainer = true;
-	boolean dataFault = false;
-	boolean fatalError = false;
-	fatalErrorMessage = "";
+	inContainer = true;
 	messages = "";
 	status = "";
 	for (int i = 0; i < 7; i++) {
@@ -56,27 +49,14 @@
 	mailprops.setProperty(mailserver, host);
 	mailSession = Session.getDefaultInstance(mailprops);
 %>
-<jsp:declaration>
-	String dbUrl = "";
-	String dbUsr = "";
-	String dbPW = "";
-</jsp:declaration>
-<%-- Die folgende Datei initialisiert die obigen Verbindungsdaten zur Datenbank --%>
-<%@ include file="dbdata.jsp" %>
-<% //DB-Initialisierung
-	try {
-		Class.forName("com.mysql.jdbc.Driver").newInstance(); 
-		dbcon = DriverManager.getConnection("jdbc:mysql://"+dbUrl, dbUsr, dbPW);
-	} catch (Exception e) {
-		fatalError = true;
-		fatalErrorMessage = fatalErrorMessage+"<p>Verbindung zur Datenbank ist fehlgeschlagen.</p>";
-		fatalErrorMessage = fatalErrorMessage+"<pre>"+e.toString()+"</pre>";
-	}
-%>
+
+<%@ include file="init_db.jsp" %>
 <%	// Hash-Funktionen initialisieren
 	md = java.security.MessageDigest.getInstance("SHA-512");
 	md2 = java.security.MessageDigest.getInstance("SHA-1");
 %>
+
+
 <%	// Status-Abfrage und Einbindung entsprechender Skripte zur Datenbehandlung
 	if (request.getParameter("status") != null) {
 		status = request.getParameter("status");
@@ -87,6 +67,10 @@
 		if (status.equals("login") && session.getAttribute("uid") == null) {
 		%>
 			<%@ include file="includes/login.jsp" %>
+		<%
+		} else if (status.equals("update") && session.getAttribute("uid") != null) {
+		%>
+			<%@ include file="includes/processChanges.jsp" %>
 		<%
 		} else if (status.equals("logout")) {
 		%>
@@ -114,6 +98,12 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<script type="text/javascript" src="js/toolbox.js"></script>
+<% if (session.getAttribute("uid") == null) { %>
+		<script type="text/javascript" src="js/loginform.js"></script>
+<% } else { %>
+		<script type="text/javascript" src="js/wochenplan.js"></script>
+<% } %>
 		<title>Wochenplaner - Programmierübungsaufgabe</title>
 	</head>	
 	<body>

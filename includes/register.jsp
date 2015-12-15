@@ -115,9 +115,9 @@
 				  
 				  Transport.send(mail);
 			   }catch (MessagingException mex) {
-				   dataFault = true;
-				  mex.printStackTrace();
-				  messages = messages + "Error: unable to send E-Mail....";
+					dataFault = true;
+					mex.printStackTrace();
+					messages = messages + "<p>Es konnte keine E-Mail mit Aktivierungslink versandt werden, da kein Mailserver konfiguriert ist. Ihr Account muss manuell durch einen Administrator aktiviert werden.</p>";
 			   }
 			
 			

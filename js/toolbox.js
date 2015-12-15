@@ -266,7 +266,7 @@ Toolbox.jz_xhr = function() {
 			content = content ? content : 'value=empty';
 			method = method ? method : 'POST';
 			ct = ct ? ct : 'application/x-www-form-urlencoded';
-			xrf = this.xmlHttp_response_function;
+			xrf = this.response_function;
 			this.xmlHttp.queue.push({ url:url,content:content,blockNext:blockNext,method:method,ct:ct,xrf:xrf,obj:this,args:args });
 		}
 	}	

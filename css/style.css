@@ -35,7 +35,7 @@ header a:visited, header a:active {
 	background-color:#eee;
 }
 
-main {
+main, div.boxcontainer {
 	display:flex;
 	flex-direction:column;
 }
@@ -94,30 +94,26 @@ main {
 #weekly tr {
 	box-sizing:border-box;
 	width:95vw;
+	border-bottom:1px solid #777;
+}
+
+#weekly tr:nth-child(2n+1):not(:first-child) {
+	background-color:#ddd;
+}
+
+#weekly tr:hover td:first-child {
+	background-color:#dcfcbd;
 }
 
 #weekly td {
 	box-sizing:border-box;
 	width:calc(11.875vw + (11.875vw - 2.5rem) / 7);
-	height:calc((95vh - 6rem)/(16*4));
+	height:calc((95vh - 6rem)/(16));
 	max-height:calc((95vh - 6rem)/(16*4));
 	padding:0.2em 0.5em;
-	border-right:1px solid #777;
+	border-right:1px double #777;
 	text-align:center;
 }
-
-#weekly tr:nth-child(4n+1) {
-	border-bottom:1px solid #777;
-}
-
-#weekly tr:nth-child(4n+3) {
-	border-bottom:1px dashed #777;
-}
-
-#weekly tr:nth-child(4n+2), #weekly tr:nth-child(4n) {
-	
-}
-
 
 #weekly td.hour {
 	text-align:right;
@@ -133,9 +129,26 @@ main {
 }
 
 @media all and (min-width: 36rem) {
-	main {
+	main, div.boxcontainer {
 		flex-direction: row;
 		justify-content:center;
 		margin:0px auto;
 	}
+}
+
+/* Dialoge */
+
+dialog.modal {
+	position: fixed;
+	top:15vh;
+	left:0;
+	width:70vw;
+	height:70vh;
+	overflow: auto;
+	background-color:rgba(75,75,75);
+	padding:0 2em;
+}
+
+dialog fieldset {
+	margin-top:2em;
 }
