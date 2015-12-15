@@ -2,8 +2,22 @@
 <jsp:declaration>
 	int stunde;
 	int tag;
+	Calendar cal;
+	int today;
+	int now;
 	String[] wochentag = {"","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
 </jsp:declaration>
+<%
+	cal = Calendar.getInstance();
+	cal.setTime(new java.util.Date());
+	today = cal.get(Calendar.DAY_OF_WEEK);
+	now = cal.get(Calendar.HOUR_OF_DAY);
+	if (today > 1) { 
+		today = today - 1;
+	} else if (today == 1) {
+		today = 7;
+	} 
+%>
 
 <%-- Kalenderdaten aus Datenbank laden --%>
 <%@ include file="loadEvents.jsp" %>
@@ -21,7 +35,13 @@
 			<% for (stunde = 7; stunde <= 21; stunde++) { %>
 				<tr>
 					<td class="hour"><%= stunde %>:00</td>
-					<% for (tag = 1; tag <= 7; tag++) { %>	
+					<% for (tag = 1; tag <= 7; tag++) { 
+						
+						String tclasses = "";
+						
+						if (today == tag && now == stunde) { tclasses = tclasses + " now"; }
+						
+						%>	
 						<td id="<%=tag%>-<%=stunde%>" x-tag="<%= tag %>" x-stunde="<%=stunde%>" 
 						<% if(dates.containsKey(Integer.valueOf((tag*100+stunde)))) { 
 								
@@ -29,9 +49,9 @@
 								i = dates.get(Integer.valueOf((tag*100+stunde))).hashCode();
 								String titleColor = Integer.toHexString(((i>>16)&0xFF))+Integer.toHexString(((i>>8)&0xFF))+Integer.toHexString((i&0xFF));
 						%>
-							x-titel="<%=dates.get(Integer.valueOf((tag*100+stunde)))%>" x-beschreibung="<%=descriptions.get(dates.get(Integer.valueOf((tag*100+stunde))))%>" class="slot date" title="<%= descriptions.get(dates.get(Integer.valueOf((tag*100+stunde)))) %>" style="background-color:#<%=titleColor%>"><%=dates.get(Integer.valueOf((tag*100+stunde)))%></td>
+							x-titel="<%=dates.get(Integer.valueOf((tag*100+stunde)))%>" x-beschreibung="<%=descriptions.get(dates.get(Integer.valueOf((tag*100+stunde))))%>" class="slot date<%=tclasses%>" title="<%= descriptions.get(dates.get(Integer.valueOf((tag*100+stunde)))) %>" style="background-color:#<%=titleColor%>"><%=dates.get(Integer.valueOf((tag*100+stunde)))%></td>
 						<% } else { %>
-							class="slot"></td>
+							class="slot<%=tclasses%>"></td>
 						<% } %>
 					<% } %>
 				</tr>
