@@ -1,3 +1,4 @@
+<jsp:directive.page pageEncoding="UTF-8"/>
 <jsp:declaration>
 	Connection dbcon;
 	Statement dbs;
@@ -15,7 +16,7 @@
 <% //DB-Initialisierung
 	try {
 		Class.forName("com.mysql.jdbc.Driver").newInstance(); 
-		dbcon = DriverManager.getConnection("jdbc:mysql://"+dbUrl, dbUsr, dbPW);
+		dbcon = DriverManager.getConnection("jdbc:mysql://"+dbUrl+"?useUnicode=true&characterEncoding=UTF-8", dbUsr, dbPW);
 	} catch (Exception e) {
 		fatalError = true;
 		fatalErrorMessage = fatalErrorMessage+"<p>Verbindung zur Datenbank ist fehlgeschlagen.</p>";

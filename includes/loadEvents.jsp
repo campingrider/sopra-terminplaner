@@ -2,11 +2,13 @@
 <jsp:declaration>
 	HashMap descriptions;
 	HashMap dates;
+	ArrayList titles;
 </jsp:declaration>
 <%
 
 	descriptions = new HashMap<String,String>();
 	dates = new HashMap<Integer,String>();
+	titles = new ArrayList<String>();
 	
 	sql = "SELECT `title`,`description`,`daytime` FROM `sopraplaner_dates` INNER JOIN `sopraplaner_events` ON `sopraplaner_dates`.`eid`=`sopraplaner_events`.`eid` WHERE `uid`='"+session.getAttribute("uid")+"';";
 	
@@ -16,19 +18,18 @@
 				
 		while (dbrs.next()) {			
 			dates.put(Integer.valueOf(dbrs.getInt("daytime")),dbrs.getString("title"));
-			descriptions.put(dbrs.getString("title"),dbrs.getString("description"));
-			%>
-			<script type="text/javascript">
-				console.log('<%=dbrs.getString("daytime")%>');
-			</script>
-			<%
+			
+			if (!descriptions.containsKey(dbrs.getString("title"))) {
+				titles.add(dbrs.getString("title"));
+				descriptions.put(dbrs.getString("title"),dbrs.getString("description"));
+			}
+			
 		} 
 	
 	} catch (SQLException e) {
 		%>
 		<script type="text/javascript">
 			window.alert("Die Datenbank hatte Schwierigkeiten, Termine zu finden.");
-			console.log("<%=e.getMessage()%>");
 		</script>
 		<%
 	}
