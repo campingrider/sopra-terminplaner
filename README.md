@@ -9,7 +9,7 @@ Das System baut auf Apache Tomcat als Webserver auf, die benötigten Tabellen we
 
 Bei der Einrichtung der beteiligten Server muss besonders auf die Zeichenkodierung geachtet werden, da Tomcat und vor allem der MySQL-Connector-Java sich gerne weigern, die Daten in utf-8 zu schicken - im Zweifelsfall muss auf nicht-ASCII-Zeichen verzichtet werden, da die Datenbank sonst im Bereich des Wochenplaners bei falsch maskierten Zeichen im Veranstaltungstitel bestimmte Änderungen verweigert.
 
-Zusätzliche libs (zu platzieren in %CATALINA_HOME%/lib), die für tomcat benötigt werden:
+Dieses Projekt nutzt und liefert folgende Drittanbieter-libraries aus:
 
 ### Für die Datenbankverbindung ###
 * mysql-connector-java-3.1.14-bin.jar  
